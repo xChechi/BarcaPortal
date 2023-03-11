@@ -21,7 +21,7 @@ import java.awt.TextField;
 public class MyPortal extends JFrame {
 
 	/** https://github.com/xChechi/BarcaPortal.git
-	 *  git@github.com:xChechi/BarcaPortal.git
+	 *  git@github.com:xChechi/BarcaPortal.git 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -33,7 +33,7 @@ public class MyPortal extends JFrame {
 	
 	public static void main(String[] args) {
 		//Видях, че е добра практика и май така се прави да се облича с този EventQueue, защото така изчаква всичко да зареди 
-		//при по-големи проекти и тогава рендерира нашия фрейм
+		//при по-големи проекти и тогава рендерира нашия фрейм.
 		EventQueue.invokeLater(new Runnable() {
 			
 			public void run() {
