@@ -9,11 +9,14 @@ import java.awt.Image;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Button;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.awt.event.ActionEvent;
 import java.awt.TextField;
 
@@ -30,10 +33,11 @@ public class MyPortal extends JFrame {
 	private JLabel usernameLabel, emailLabel, passwordLabel, repeatPasswordLabel, rightTitle;
 	private Button button;
 	Dashboard dashboard;
+	Image image, image2;
 	
 	public static void main(String[] args) {
 		//Видях, че е добра практика и май така се прави да се облича с този EventQueue, защото така изчаква всичко да зареди 
-		//при по-големи проекти и тогава рендерира нашия фрейм.
+		//при по-големи проекти и тогава рендерира нашия фрейм. 234
 		EventQueue.invokeLater(new Runnable() {
 			
 			public void run() {
@@ -55,8 +59,19 @@ public class MyPortal extends JFrame {
 		this.setTitle("FC Barcelona Portal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		ImageIcon logo = new ImageIcon("barcaLogo.png");
-		this.setIconImage(logo.getImage());
+		ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("images/barcaLogo.png");
+        
+		try {
+			image = ImageIO.read(inputStream);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		this.setIconImage(image);
+		//ImageIcon logo = new ImageIcon("barcaLogo.png");
+		//this.setIconImage(logo.getImage());
 		
 		setBounds(0, 0, 800, 600);
 		contentPane = new JPanel();
@@ -71,8 +86,20 @@ public class MyPortal extends JFrame {
 		leftPanel.setBounds(0, 0, 420, 550);
 		contentPane.add(leftPanel);
 		
-		ImageIcon icon = new ImageIcon("logo.png");
+		ClassLoader classLoader2 = getClass().getClassLoader();
+        InputStream inputStream2 = classLoader.getResourceAsStream("images/logo.png");
+        
+		try {
+			image2 = ImageIO.read(inputStream2);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		ImageIcon icon = new ImageIcon(image2);
         Image mainLogo = icon.getImage();
+        
+        
         //Това дето го открихме вчера за фитването на снимки в даден прозорец. В случая вместо frame.getWidht направо съм сложил размерите му.      
         JLabel labelLogo = new JLabel(new ImageIcon(mainLogo.getScaledInstance(400, 550, Image.SCALE_SMOOTH)));
         leftPanel.add(labelLogo);
@@ -94,7 +121,13 @@ public class MyPortal extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				if (e.getSource() == button) {
+				String email = emailField.getText();
+				String name = usernameField.getText();
+                String password = new String(passwordField.getPassword()); //с JPassword и getPassword() правиш да е с **** и после да вземеш инфото
+                String confirmPassword = new String(repeatPasswordField.getPassword());
+				
+				if (isValidEmail(email) && password.equals(confirmPassword) && e.getSource() == button) {
+					
 					//Това е последователноста - 1-во създаваш новия прозорец, после затваряш текущия с dispose() и накрая правиш видим новия		
 					dashboard = new Dashboard();
 					dispose();
@@ -102,7 +135,7 @@ public class MyPortal extends JFrame {
 				}
 				
 				
-				String email = emailField.getText();
+				
 				
 				//Валидация дали имейла е в правилен формат. Функцията за проверка е отделена за по пригледно
                 if (!isValidEmail(email)) {
@@ -111,9 +144,7 @@ public class MyPortal extends JFrame {
                     
                 }
 				
-				String name = usernameField.getText();
-                String password = new String(passwordField.getPassword()); //с JPassword и getPassword() правиш да е с **** и после да вземеш инфото
-                String confirmPassword = new String(repeatPasswordField.getPassword());
+				
                 
                 //Валидация дали данните в двете полета за парола и потвърди парола съвпадат
                 if (!password.equals(confirmPassword)) {
@@ -123,11 +154,13 @@ public class MyPortal extends JFrame {
                 }
                 
                 //Информативен поп-ъп, че е прибрало инфото от формата
+                if(isValidEmail(email) && password.equals(confirmPassword)) {
                 JOptionPane.showMessageDialog(MyPortal.this,
                         "Your name is " + name + " with email: " + email + " and your hidden password is " + password,
                         "Login Successful",
                         JOptionPane.INFORMATION_MESSAGE);
 				}
+			}
 				
 		});
 		
