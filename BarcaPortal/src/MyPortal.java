@@ -86,7 +86,7 @@ public class MyPortal extends JFrame {
 		leftPanel.setBounds(0, 0, 420, 550);
 		contentPane.add(leftPanel);
 		
-		ClassLoader classLoader2 = getClass().getClassLoader();
+		//ClassLoader classLoader2 = getClass().getClassLoader();
         InputStream inputStream2 = classLoader.getResourceAsStream("images/logo.png");
         
 		try {
